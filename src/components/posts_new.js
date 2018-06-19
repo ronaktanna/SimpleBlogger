@@ -5,22 +5,34 @@ class PostsNew extends Component {
 
 
   renderField(field) {
+    // Get the meta property off the field object.
+    // Also, get the touched and error properties from the meta object that we just pulled off the field object.
+    const { meta: { touched, error } } = field;
+    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
     return (
-      <div className="form-group">
+      <div className={className}>
       <label>{field.label}</label>
         <input
           {...field.input}
           className="form-control"
           type="text"
         />
-        {field.meta.error}
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
       </div>
     );
   }
 
+  onSubmit(values) {
+    console.log(values);
+  }
+
   render() {
+    const { handleSubmit } = this.props;
+
     return (
-      <form>
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           label="Title"
           name="title"
@@ -36,6 +48,7 @@ class PostsNew extends Component {
           name="content"
           component={this.renderField}
         />
+        <button className="btn btn-primary" type="submit"> Submit </button>
       </form>
     );
   }
